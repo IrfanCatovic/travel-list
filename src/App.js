@@ -7,10 +7,29 @@ const initialItems = [
 export default function App() {
   return (
     <div className="app">
-      <Logo />
+      {/* <Logo />
       <Form />
       <PackingList />
-      <Stats />
+      <Stats /> */}
+
+  const [friends, setFriends] = useState(initialFriends);
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState(null);
+
+  function handleShowAddFriend() {
+    setShowAddFriend((show) => !show);
+  }
+
+  function handleAddFriend(friend) {
+    setFriends((friends) => [...friends, friend]);
+    setShowAddFriend(false);
+  }
+
+  function handleSelection(friend) {
+    // setSelectedFriend(friend);
+    setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
+    setShowAddFriend(false);
+  
     </div>
   );
 }
