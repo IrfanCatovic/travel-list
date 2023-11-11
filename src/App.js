@@ -7,20 +7,10 @@ const initialItems = [
 export default function App() {
   return (
     <div className="app">
-      {/* <Logo />
+      <Logo />
       <Form />
       <PackingList />
-      <Stats /> */}
-        function handleSplitBill(value) {
-    setFriends((friends) =>
-      friends.map((friend) =>
-        friend.id === selectedFriend.id
-          ? { ...friend, balance: friend.balance + value }
-          : friend
-      )
-    );
-
-    setSelectedFriend(null);
+      <Stats />
     </div>
   );
 }
