@@ -148,6 +148,13 @@ function FlashCards() {
 
   function handleClick(id) {
     setSelectedId(id !== selectedId ? id : null);
+    //mi smo sa className proverili da li je id koji je kliknut jednak selektovanom id
+    //on kroz loop proverava koji smo kliknuli
+    //kada kroz loop nadje koji je kliknut taj ce da pocrveni, ne mogu da crvene dva u isto vreme
+    //isto vazi i za pitanje i odgovor u <p>
+    //a sa nullish operatorom proveravamo ako id nije jedan novom selektovanom id onda ce da primi taj drugi ID i drugi ce da pocrveni
+    //samim tim ce use state da refresuje komponentu i novi div ce da promeni boju
+    //ukoliko je id jednak novom selektovanom id onda ce da vrati rezultat null i da vrati sve u prvobitno stanje
   }
 
   return (
