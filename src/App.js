@@ -49,6 +49,17 @@ export default function App() {
     setItems((items) => [...items, item]);
   }
 
+  function handleToggleItem(id) {
+    setItems(
+      (items) =>
+        items.map((item) =>
+          item.id === id ? { ...item, packed: !item.packed } : item
+        ) // ovo ide kroz ceo array item i proverava da li odgovara id unetom id
+      // kada nadje taj id koji odgovara onda vraca sve elemente niza i tom itemu menja properti packed u njemu suprotan pa kakav god da je
+      //u drugom slucaju vraca sve iteme kakvi su bili
+    );
+  }
+
   function handleDeleteItem(id) {
     setItems((items) => items.filter((item) => item.id !== id));
     //funckija filter prodje kroz ceo array items i proverava da li dobijeni id nije jednak id u nizu
@@ -60,7 +71,11 @@ export default function App() {
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} onDeleteItem={handleDeleteItem} />
+      <PackingList
+        items={items}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+      />
       <Stats />
       <FlashCards />
     </div>
@@ -123,12 +138,17 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackingList({ items, onDeleteItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item} onDeleteItem={onDeleteItem} key={item.id} /> //ovde dobijamo onDeleteItem i saljemo ga dalje u item
+          <Item
+            item={item}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+            key={item.id}
+          /> //ovde dobijamo onDeleteItem i saljemo ga dalje u item
           //prvi item je ima komponente, drugi item je prop koji cemo da posaljemo, i treci item u zagradama je objekat koji smo izlistali iz initialItems
         ))}
       </ul>
@@ -136,9 +156,19 @@ function PackingList({ items, onDeleteItem }) {
   );
 }
 
-function Item({ item, onDeleteItem }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li>
+      <input
+        type="checkbox"
+        value={item.packed}
+        onChange={() => {
+          onToggleItem(item.id);
+        }}
+      />
+      {/* Pravimo kontrol element 
+      prvo mu dajemo vrednost
+      drugo onchangehandler da bi se update kada god kliknemo */}
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
