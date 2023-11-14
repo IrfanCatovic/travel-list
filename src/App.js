@@ -43,11 +43,17 @@ const questions = [
 ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={handleAddItems} />
+      <PackingList items={items} />
       <Stats />
       <FlashCards />
     </div>
@@ -58,7 +64,7 @@ function Logo() {
   return <h1>🚢 Far away bag 🧳</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -69,6 +75,8 @@ function Form() {
 
     const newItem = { description, quantity, packed: false, id: Date.now() };
     console.log(newItem);
+
+    onAddItems(newItem);
 
     setDescription("");
     setQuantity(1);
@@ -108,11 +116,11 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
+        {items.map((item) => (
           <Item item={item} key={item.id} />
           //prvi item je ima komponente, drugi item je prop koji cemo da posaljemo, i treci item u zagradama je objekat koji smo izlistali iz initialItems
         ))}
@@ -148,6 +156,7 @@ function FlashCards() {
 
   function handleClick(id) {
     setSelectedId(id !== selectedId ? id : null);
+    //ID je novi id koji primamo selectedId je onaj koji je zapamcen uz useState
     //mi smo sa className proverili da li je id koji je kliknut jednak selektovanom id
     //on kroz loop proverava koji smo kliknuli
     //kada kroz loop nadje koji je kliknut taj ce da pocrveni, ne mogu da crvene dva u isto vreme
@@ -171,3 +180,13 @@ function FlashCards() {
     </div>
   );
 }
+
+//TWO TYPES OF STATE
+//Global:
+//Many components might need and it's shared in every component
+//-----------------
+//Local:
+//Need in one or few components - where is defined and child components
+
+//When and where to place state
+//first question - will data change at some point
