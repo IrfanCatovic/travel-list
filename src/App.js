@@ -45,6 +45,13 @@ const questions = [
 export default function App() {
   const [items, setItems] = useState([]);
 
+  function handleClearList() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete all items?"
+    );
+    if (confirmed) setItems([]);
+  }
+
   function handleAddItems(item) {
     setItems((items) => [...items, item]);
   }
@@ -75,6 +82,7 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearList={handleClearList}
       />
       <Stats items={items} />
 
@@ -139,17 +147,26 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackingList({ items, onDeleteItem, onToggleItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem, onClearList }) {
   const [sortBy, setSortBy] = useState("input");
 
   let sortedItems;
 
   if (sortBy === "input") sortedItems = items;
 
+  if (sortBy === "description")
+    sortedItems = items
+      .slice() //take copy of array so we dont manipulate with original one
+      .sort((a, b) => a.description.localCompare(b.description)); //function for sorting items by name
+
+  if (sortBy === "packed")
+    sortedItems = items
+      .slice()
+      .sort((a, b) => Number(a.packed) - Number(b.packed));
   return (
     <div className="list">
       <ul>
-        {items.map((item) => (
+        {sortedItems.map((item) => (
           <Item
             item={item}
             onDeleteItem={onDeleteItem}
@@ -165,6 +182,7 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
           <option value="description"> Sort by description</option>
           <option value="packed"> Sort by packed status</option>
         </select>
+        <button onClick={onClearList}>Clear list</button>
       </div>
     </div>
   );
