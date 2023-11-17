@@ -1,5 +1,9 @@
 import { useState } from "react";
 import "./App.css";
+import Logo from "./Components/logo";
+import Form from "./Components/Form";
+import Stats from "./Components/Stats";
+import PackingList from "./Components/PackingList";
 
 // const initialItems = [
 //   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -77,161 +81,26 @@ export default function App() {
   return (
     <div className="app">
       <Logo />
-      <Form onAddItems={handleAddItems} />
+      <Form
+        onAddItems={handleAddItems}
+        //ovde saljemo kao prop u form funkciju handleaddItems
+      />
+
       <PackingList
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
-        onClearList={handleClearList}
+        onClearList={handleClearList} // ovu funkciju smo morali da posaljemo jer se ne nalazi u komponenti nego je iznad svega
+        //morala je da bude iznad svega jer smo menjali iteme koji se nalaze u globalnom appu
+
+        //Lift state up
+        //prvo moramo da imamo item u zajednicki folder
+        //saljemo items kao prop u packing list
       />
       <Stats items={items} />
 
       <FlashCards />
     </div>
-  );
-}
-
-function Logo() {
-  return <h1>🚢 Far away bag 🧳</h1>;
-}
-
-function Form({ onAddItems }) {
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(1);
-
-  function handleSumbit(e) {
-    e.preventDefault(); //ovo je da bismo onemogucili refresovanje stranice sto je po prirodi HTML kada pritisnemo submit button
-
-    if (!description) return;
-
-    const newItem = { description, quantity, packed: false, id: Date.now() };
-    console.log(newItem);
-
-    onAddItems(newItem);
-
-    setDescription("");
-    setQuantity(1);
-  }
-
-  return (
-    <form className="add-form" onSubmit={handleSumbit}>
-      <h3>What do you need for your 😍 trip?</h3>
-      <select
-        value={quantity}
-        onChange={(e) => setQuantity(Number(e.target.value))}
-      >
-        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-          //array.from je trenutno nebitna radi nesto kao for petlja prvo je duzina, drugo odakle polazi i da je to broj i trece da prag
-          //ovo se sve desava u console
-          //kada se istampa ta lista sa .Map moramo da prodjemo kroz nju da izlistamo sve brojeve
-          //onda se iz konzole stampa na UI i pomocu OPTION vidimo rezultate liste
-          //gde su vrednosti num i specifik key je takodje num jer se isti brojevi nece ponavljat
-
-          <option value={num} key={num}>
-            {num}
-          </option>
-        ))}
-      </select>
-      <input
-        type="text"
-        placeholder="Item..."
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        //ovo on change radimo kao treci korak da bi description menjao svoju vrednost, da bi imao gde da je pamti
-        //ako to ne bismo uradili onda bi samo pisali u polje description i kada pritisnemo enter nigde se ne zapamti ali se polje isprazni
-        //ovo e sto primamo je event, a u ovom slucaju je onChange i dobijamo objekat, a iz tog objekta vadimo sta nam treba
-        //u ovom slucaju e.target.value
-      />
-      <button>Add</button>
-    </form>
-  );
-}
-
-function PackingList({ items, onDeleteItem, onToggleItem, onClearList }) {
-  const [sortBy, setSortBy] = useState("input");
-
-  let sortedItems;
-
-  if (sortBy === "input") sortedItems = items;
-
-  if (sortBy === "description")
-    sortedItems = items
-      .slice() //take copy of array so we dont manipulate with original one
-      .sort((a, b) => a.description.localCompare(b.description)); //function for sorting items by name
-
-  if (sortBy === "packed")
-    sortedItems = items
-      .slice()
-      .sort((a, b) => Number(a.packed) - Number(b.packed));
-  return (
-    <div className="list">
-      <ul>
-        {sortedItems.map((item) => (
-          <Item
-            item={item}
-            onDeleteItem={onDeleteItem}
-            onToggleItem={onToggleItem}
-            key={item.id}
-          /> //ovde dobijamo onDeleteItem i saljemo ga dalje u item
-          //prvi item je ima komponente, drugi item je prop koji cemo da posaljemo, i treci item u zagradama je objekat koji smo izlistali iz initialItems
-        ))}
-      </ul>
-      <div className="actions">
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-          <option value="input"> Sort by input order</option>
-          <option value="description"> Sort by description</option>
-          <option value="packed"> Sort by packed status</option>
-        </select>
-        <button onClick={onClearList}>Clear list</button>
-      </div>
-    </div>
-  );
-}
-
-function Item({ item, onDeleteItem, onToggleItem }) {
-  return (
-    <li>
-      <input
-        type="checkbox"
-        value={item.packed}
-        onChange={() => {
-          onToggleItem(item.id);
-        }}
-      />
-      {/* Pravimo kontrol element 
-      prvo mu dajemo vrednost
-      drugo onchangehandler da bi se update kada god kliknemo */}
-      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
-        {item.quantity} {item.description}
-      </span>
-      <button onClick={() => onDeleteItem(item.id)}>❌</button>
-      {/* Ovde dobijamo onDeleteItem */}
-    </li>
-  );
-}
-
-function Stats({ items }) {
-  //ovo radimo da ne bismo radili useState 2x bez potrebe
-  const numItems = items.length;
-
-  const numPacked = items.filter((item) => item.packed).length;
-
-  const percentage = Math.round((numPacked / numItems) * 100);
-
-  if (!items.length)
-    return (
-      <p className="stats">
-        <em>Start adding some items to your packing list 📃</em>
-      </p>
-    );
-  return (
-    <footer className="stats">
-      <em>
-        {percentage === 100
-          ? "You have got everything! Ready to go ✅ "
-          : `You have ${numItems} on your list, and you already packed X (${percentage}% ))`}
-      </em>
-    </footer>
   );
 }
 
