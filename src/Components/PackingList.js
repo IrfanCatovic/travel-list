@@ -16,7 +16,7 @@ export default function PackingList({
   if (sortBy === "description")
     sortedItems = items
       .slice() //take copy of array so we dont manipulate with original one
-      .sort((a, b) => a.description.localCompare(b.description)); //function for sorting items by name
+      .sort((a, b) => a.description.localeCompare(b.description)); //function for sorting items by name
 
   if (sortBy === "packed")
     sortedItems = items
