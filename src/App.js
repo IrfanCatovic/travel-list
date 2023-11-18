@@ -6,6 +6,7 @@ import Stats from "./Components/Stats";
 import PackingList from "./Components/PackingList";
 import FlashCards from "./Components/FlashCards";
 import Accordion from "./Components/Accordion";
+import TipCalculate from "./Components/TipCalculate";
 
 const faqs = [
   {
@@ -85,6 +86,8 @@ export default function App() {
       <FlashCards />
 
       <Accordion data={faqs} />
+
+      <TipCalculate />
     </div>
   );
 }
