@@ -83,11 +83,11 @@ export default function App() {
       />
       <Stats items={items} />
 
-      <FlashCards />
+      {/* <FlashCards /> */}
 
-      <Accordion data={faqs} />
+      {/* <Accordion data={faqs} /> */}
 
-      <TipCalculate />
+      {/* <TipCalculate /> */}
     </div>
   );
 }
