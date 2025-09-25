@@ -13,6 +13,7 @@ export default function Form({ onAddItems }) {
     console.log(newItem);
 
     onAddItems(newItem);
+    //funckija sluzi za slanje podataka u parent iz child
 
     setDescription("");
     setQuantity(1);
