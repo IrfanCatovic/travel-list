@@ -49,7 +49,8 @@ export default function App() {
       (items) =>
         items.map((item) =>
           item.id === id ? { ...item, packed: !item.packed } : item
-        ) // ovo ide kroz ceo array item i proverava da li odgovara id unetom id
+        )
+      // ovo ide kroz ceo array item i proverava da li odgovara id unetom id
       // kada nadje taj id koji odgovara onda vraca sve elemente niza i tom itemu menja properti packed u njemu suprotan pa kakav god da je
       //u drugom slucaju vraca sve iteme kakvi su bili
     );
@@ -57,9 +58,23 @@ export default function App() {
 
   function handleDeleteItem(id) {
     setItems((items) => items.filter((item) => item.id !== id));
-    //funckija filter prodje kroz ceo array items i proverava da li dobijeni id nije jednak id u nizu
-    //ako nije jednak onda moze da nastavi u novi kreirani niz
-    //ako je jednak on ne moze u novi niz nego bude izbrisan
+    // Isto kao ranije, koristimo callback formu (items = trenutna vrednost state-a).
+    // To osigurava da radimo sa uvek najnovijim nizom.
+
+    // items.map((item) => … )
+    // map prolazi kroz ceo niz i pravi novi niz.
+    // Svaki element (item) se obrađuje jedan po jedan.
+    // Ako item.id === id → znači da smo našli pravog igrača/objekat koji želimo da menjamo.
+
+    //   Ako je id jednak:
+    // napravi novi objekat ({ ...item, … }) koji kopira sve stare vrednosti ali menja packed na suprotnu vrednost (true → false, false → true).
+
+    // Ako nije jednak:
+    // vrati isti item bez promene.
+
+    // Rezultat
+    // Dobijamo novi niz gde je samo jedan objekat promenjen (packed preokrenut).
+    // Svi ostali ostaju isti.
   }
 
   return (
