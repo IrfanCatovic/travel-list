@@ -74,12 +74,14 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
-        onClearList={handleClearList} // ovu funkciju smo morali da posaljemo jer se ne nalazi u komponenti nego je iznad svega
+        onClearList={handleClearList}
+        // ovu funkciju smo morali da posaljemo jer se ne nalazi u komponenti nego je iznad svega
         //morala je da bude iznad svega jer smo menjali iteme koji se nalaze u globalnom appu
 
-        //Lift state up
-        //prvo moramo da imamo item u zajednicki folder
-        //saljemo items kao prop u packing list
+        //lift state up
+        //salje se state u najblizi parent, pa se prosledi state u sve komponente koje ce da koriste
+        //ali nece da je menjaju samo im treba za rad
+        //i funkciju onClearList={handleClearList} saljemo u tu jednu komponentu koja moze da menja state
       />
       <Stats items={items} />
 
