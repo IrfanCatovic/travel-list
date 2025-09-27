@@ -21,6 +21,8 @@ export default function Accordion({ data }) {
 
 function AccordionItem({ num, title, curOpen, onOpen, children }) {
   const isOpen = num === curOpen;
+  //kada renderuje sve iteme preko .map onda proverava koji je trenutno otvoren
+  //a zbog handle toggle koji proverava koji regulise open moze samo jedan da bude
 
   function handleToggle() {
     onOpen(isOpen ? null : num);
